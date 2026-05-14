@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TECNOL H - Catálogo Completo</title>
+    <style>
+        :root {
+            --azul-oscuro: #0a0e1a;
+            --verde-neon: #39FF14;
+            --negro: #050505;
+            --blanco: #ffffff;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--azul-oscuro);
+            color: var(--blanco);
+        }
+
+        /* NAVEGACIÓN */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            padding: 15px 5%;
+            background: var(--negro);
+            border-bottom: 2px solid var(--verde-neon);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo { font-size: 1.8rem; font-weight: bold; color: var(--verde-neon); }
+
+        /* PORTADA (HERO) */
+        #portada {
+            height: 90vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            background: linear-gradient(rgba(10, 14, 26, 0.7), rgba(10, 14, 26, 0.7)), 
+                        url('https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&q=80') center/cover;
+        }
+
+        h1 { font-size: 4.5rem; margin: 0; text-shadow: 0 0 15px var(--verde-neon); }
+
+        .btn-principal {
+            margin-top: 30px;
+            padding: 18px 50px;
+            font-size: 1.3rem;
+            background: var(--verde-neon);
+            color: black;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.4s;
+        }
+
+        /* SECCIÓN TIENDA */
+        #tienda {
+            display: none;
+            padding: 40px 5%;
+            background: #f4f4f4;
+            color: #333;
+            min-height: 100vh;
+        }
+
+        .categorias-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+
+        .btn-cat {
+            padding: 10px 15px;
+            background: var(--azul-oscuro);
+            color: var(--verde-neon);
+            border: 1px solid var(--verde-neon);
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: bold;
+            border-radius: 3px;
+        }
+
+        .btn-cat:hover, .btn-cat.active {
+            background: var(--verde-neon);
+            color: black;
+        }
+
+        .grid-productos {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .card img { width: 100%; border-radius: 5px; margin-bottom: 10px; }
+        .card h3 { font-size: 0.9rem; margin: 5px 0; color: #444; height: 35px; overflow: hidden; }
+        .precio { color: #27ae60; font-size: 1.2rem; font-weight: bold; margin: 10px 0; }
+
+        footer { padding: 30px; text-align: center; background: var(--negro); color: #666; }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="logo">TECNOL H</div>
+        <button onclick="irInicio()" style="background:none; border:none; color:white; cursor:pointer;">Inicio</button>
+    </nav>
+
+    <section id="portada">
+        <p style="letter-spacing: 5px;">BIENVENIDO A</p>
+        <h1>TECNOL H</h1>
+        <button class="btn-principal" onclick="irTienda()">PRODUCTOS</button>
+    </section>
+
+    <section id="tienda">
+        <h2 style="text-align:center">Nuestras Categorías</h2>
+        <div class="categorias-grid" id="menu-filtros"></div>
+        <hr>
+        <div class="grid-productos" id="lista-productos"></div>
+    </section>
+
+    <footer>&copy; 2026 TECNOL H - Lo mejor en tecnología</footer>
+
+    <script>
+        const db = {
+            "Audífonos": [
+                {n: "PRO 2DA GENERACIÓN", p: "Q250.00"}, {n: "LENOVO XT15 PRO", p: "Q150.00"}, {n: "XIAOMI REDMI BUDS 6", p: "Q360.00"},
+                {n: "XIAOMI REDMI BUDS 6 LITE", p: "Q200.00"}, {n: "XIAOMI REDMI BUDS 6 PLAY", p: "Q125.00"}, {n: "PRIMUS GAM. ARCUS 240", p: "Q250.00"},
+                {n: "AUDIFONO HP H111", p: "Q45.00"}, {n: "BLUETOOTH SAM. 103BT", p: "Q150.00"}, {n: "AUDÍFONO XTECH XTH 520", p: "Q100.00"},
+                {n: "AUDIFONO LOGITECH H390", p: "Q260.00"}, {n: "JABRA EVOLVE 65 MS STEREO", p: "Q1180.00"}, {n: "AUDIFONO JBL TUNE 510BT", p: "Q270.00"},
+                {n: "AUDIFONO PARA IPHONE", p: "Q200.00"}, {n: "ENDURANCE RUN JBL", p: "Q175.00"}, {n: "AUDIFONO JBL T110", p: "Q75.00"}
+            ],
+            "Bocinas": [
+                {n: "BLUETOOTH JBL CHARGE 5", p: "Q1350.00"}, {n: "BLUETOOTH JBL FLIP 5", p: "Q750.00"}, {n: "BLUETOOTH XTECH XTS-614", p: "Q120.00"},
+                {n: "KLIP XTREME KBS-600", p: "Q430.00"}, {n: "BLUETOOTH JBL FLIP 6", p: "Q950.00"}, {n: "MINI KARAOKE XTS-D622ST", p: "Q225.00"},
+                {n: "PARLANTE UNNO SP9214GY", p: "Q240.00"}, {n: "BOCINA XTECH XTS-131", p: "Q140.00"}, {n: "PC XTECH XTS 115", p: "Q95.00"},
+                {n: "PC LOGITECH S150", p: "Q150.00"}, {n: "PC XTECH XTS 110", p: "Q70.00"}, {n: "PC LOGITECH S120 2.0", p: "Q150.00"},
+                {n: "BLUETOOTH MS-2243", p: "Q100.00"}, {n: "KLIP XTREME KBS-200 AZUL", p: "Q200.00"}, {n: "KLIP XTREME KBS-250", p: "Q350.00"}
+            ],
+            "Bases TV": [
+                {n: "KLIP XTREME KPM-885", p: "Q345.00"}, {n: "KLIP XTREME KPM-935", p: "Q410.00"}, {n: "TV 32-70\" XTECH XTA-375", p: "Q105.00"},
+                {n: "KLIP XTREME KPM-725", p: "Q125.00"}, {n: "XTECH XTA 425, 32-55\"", p: "Q290.00"}, {n: "SOPORTE KLIP KMM301", p: "Q525.00"},
+                {n: "XTECH XTA 400, 23-42\"", p: "Q125.00"}, {n: "SOPORTE LED KPM310", p: "Q400.00"}, {n: "KLIP XTREME KPM-875", p: "Q190.00"},
+                {n: "SOPORTE 17\" XTECH XTA-130", p: "Q115.00"}, {n: "KLIP XTREME KPM-715", p: "Q80.00"}
+            ],
+            "Cables": [
+                {n: "IMEXX 3.5MM PLUG 1M", p: "Q15.00"}, {n: "XTECH 3.5MM PLUG 1M", p: "Q15.00"}, {n: "CABLE 2 CLAVIJAS XTC-110", p: "Q20.00"},
+                {n: "3 CLAVIJAS XTC-120", p: "Q25.00"}, {n: "3 CLAVIJAS XTC-210", p: "Q30.00"}, {n: "DATOS SATA XTC-309", p: "Q20.00"},
+                {n: "XTECH XTC 307 1.8M", p: "Q25.00"}, {n: "XTECH XTC 303 3M", p: "Q30.00"}, {n: "CABLE RED NEXXT 1M", p: "Q15.00"},
+                {n: "CABLE HDMI UNNO 1.8M", p: "Q30.00"}, {n: "HDMI XTECH XTC-152 3M", p: "Q40.00"}, {n: "XTECH XTC-303 3M", p: "Q30.00"},
+                {n: "CABLE HDMI UNNO 1.8M", p: "Q30.00"}, {n: "HDMI XTECH XTC-311 1.8M", p: "Q30.00"}, {n: "HDMI XTECH XTC-338 5M", p: "Q50.00"}
+            ],
+            "Cargadores": [
+                {n: "CARGADOR CARRO WEKOME", p: "Q35.00"}, {n: "CARGADOR DM 2 EN 1 V8", p: "Q30.00"}, {n: "CARGADOR 2 EN 1 TIPO C", p: "Q40.00"},
+                {n: "CAR. UNIVERSAL 100W IMEXX", p: "Q225.00"}, {n: "CARGADOR HP 19.5V 3.33AMP", p: "Q200.00"}, {n: "TIPO C - USB XIAOMI 33W", p: "Q150.00"},
+                {n: "CUBO TIPO C WP-U53 20W", p: "Q65.00"}, {n: "CUBO TIPO C XIAOMI 20W", p: "Q70.00"}, {n: "CUBO TIPO C BELKIN 20W", p: "Q120.00"}
+            ],
+            "Cámaras": [
+                {n: "XTECHX TW 720", p: "Q105.00"}, {n: "KLIP XTREME KWC500", p: "Q270.00"}, {n: "CAMARA ARGOM FULL HD", p: "Q350.00"}
+            ],
+            "USB/Conectores": [
+                {n: "CONECTOR RJ45 CAT5E", p: "Q1.90.00"}, {n: "HUB USB UNNO 4 PUERTOS", p: "Q100.00"}, {n: "HUB USB TIPO REGLETA", p: "Q30.00"},
+                {n: "HUB PUERTOS 2 LECTORES", p: "Q65.00"}, {n: "ENCLOSURE UNNO 2.5\" SSD", p: "Q90.00"}
+            ],
+            "Limpieza": [
+                {n: "AIRE COMP. SABO 590ML", p: "Q56.00"}, {n: "ESPUMA LIMP. SABO 590ML", p: "Q55.00"}, {n: "LIMPIA CONT. SABO 590ML", p: "Q56.00"},
+                {n: "LIMPIA CONT. ETOUCH 20 ON", p: "Q55.00"}, {n: "AIRE COMP. ETOUCH 20 ON", p: "Q55.00"}, {n: "ESPUMA LIM. ETOUCH 20 ON", p: "Q55.00"}
+            ],
+            "Impresoras": [
+                {n: "CANON PIXMA G2110", p: "Q1650.00"}, {n: "CANON PIXMA G3170 AIO", p: "Q1825.00"}, {n: "HP SMART TANK 580 AIO", p: "Q1675.00"},
+                {n: "TANK 720 ALL IN ONE", p: "Q2500.00"}, {n: "EPSON L5590 WI-FI", p: "Q3300.00"}, {n: "IMPRESORA ZEBRA ZT411", p: "Q9950.00"}
+            ],
+            "Mouses": [
+                {n: "LOGITECH M110", p: "Q85.00"}, {n: "KLIP XTREME KMO-111", p: "Q60.00"}, {n: "XTECH XTM-195", p: "Q30.00"},
+                {n: "XTECH XTM-165", p: "Q30.00"}, {n: "XTECH XTM-185", p: "Q30.00"}, {n: "XTECH XTM-205", p: "Q30.00"},
+                {n: "GAMING A7", p: "Q70.00"}, {n: "GAMING X9", p: "Q70.00"}, {n: "GAMING A9", p: "Q70.00"},
+                {n: "GAMING X7", p: "Q70.00"}, {n: "IMICE 1600", p: "Q55.00"}, {n: "GAMING HP M160", p: "Q65.00"},
+                {n: "REC. IMICE G4", p: "Q70.00"}, {n: "RECARGABLE IMICE", p: "Q70.00"}, {n: "REC. IMICE G-1800R", p: "Q70.00"}
+            ],
+            "Grabación/Accesorios": [
+                {n: "KIT UNNO INFLUENCERS", p: "Q190.00"}, {n: "TRIPODE XTECH XSS-211", p: "Q110.00"}, {n: "ADAPTADOR AUDIO+MIC", p: "Q25.00"},
+                {n: "RED TP LINK 300MBPS", p: "Q90.00"}, {n: "RED TP LINK 150MBPS", p: "Q70.00"}, {n: "RED TP LINK AC600 USB", p: "Q125.00"},
+                {n: "EXTENSOR TP LINK 300MBPS", p: "Q165.00"}, {n: "SONIDO USB 7 CANALES", p: "Q35.00"}, {n: "RED XTECH XTC-600", p: "Q110.00"},
+                {n: "MICROFONO XTS-680", p: "Q115.00"}, {n: "MINI TECLADO INALAMBRICO", p: "Q70.00"}, {n: "TABLET HYUNDAI 10.1\"", p: "Q1175.00"},
+                {n: "POWER UNNO 20000MAH", p: "Q220.00"}, {n: "XTECH XPB-200 20000MAH", p: "Q175.00"}, {n: "KLIP KPB-500 10000MAH", p: "Q140.00"}
+            ],
+            "Teclados": [
+                {n: "ULTRA FIT USB IMEXX", p: "Q45.00"}, {n: "COMBO KLIP KCK-251S", p: "Q110.00"}, {n: "TECLADO GAMING AK800", p: "Q80.00"},
+                {n: "TECLADO GAMING AK400", p: "Q95.00"}, {n: "TEC. GAMING HP K500Y", p: "Q140.00"}, {n: "TEC. GAMING HP GK400F", p: "Q350.00"},
+                {n: "TEC. GAMING XTK-510S", p: "Q100.00"}, {n: "TEC. XTECH XTK-M401IM", p: "Q200.00"}, {n: "TEC. PRIMUS PKS-092S", p: "Q460.00"},
+                {n: "COMBO INALAMBRICO IMEXX", p: "Q125.00"}, {n: "COMBO INALAMBRICO HP CS10", p: "Q200.00"}, {n: "COMBO XTK-309S", p: "Q155.00"},
+                {n: "COMBO LOG. MK235", p: "Q240.00"}, {n: "COMBO DELL KM5221W", p: "Q340.00"}, {n: "COMBO KLIP KCK-265S", p: "Q225.00"}
+            ],
+            "T. Numérico": [
+                {n: "NUMERICO IMEXX", p: "Q50.00"}, {n: "NUM. KLIP KNP-100", p: "Q85.00"}, {n: "NUM. KLIP KNP-110", p: "Q110.00"}, {n: "NUM. BLUE. MICROSOFT", p: "Q175.00"}
+            ],
+            "Transmisores": [
+                {n: "BLUETOOTH G46", p: "Q60.00"}, {n: "MULTI. BLUE. G7", p: "Q45.00"}
+            ],
+            "Tintas/Cartuchos": [
+                {n: "HP 667", p: "Q130.00"}, {n: "HP 662", p: "Q120.00"}, {n: "CANON CL-54XL", p: "Q225.00"}, {n: "CANON 146 COLOR", p: "Q175.00"},
+                {n: "CANON GI 190Y/M/C", p: "Q95.00"}, {n: "TINTA CANON UNIVERSAL", p: "Q60.00"}, {n: "TINTA EPSON T664", p: "Q110.00"},
+                {n: "TINTA EPSON T544", p: "Q110.00"}, {n: "TINTA EPSON T504", p: "Q110.00"}, {n: "TINTA HP GT52", p: "Q100.00"}
+            ],
+            "Ventiladores": [
+                {n: "XTECH XTA-156", p: "Q125.00"}, {n: "XTECH XTA-161", p: "Q175.00"}, {n: "KLIP XTREME KNS-110B", p: "Q230.00"}
+            ],
+            "Adaptadores": [
+                {n: "ADAPTADOR XTC-509", p: "Q35.00"}, {n: "3.0 A RJ45 XTC-376", p: "Q130.00"}, {n: "DISPLAYPORT A HDMI", p: "Q80.00"},
+                {n: "HDMI HEMBRA XTC-333", p: "Q30.00"}, {n: "OTG USB-C XTC-515", p: "Q45.00"}, {n: "VGA A HDMI ETOUCH", p: "Q115.00"},
+                {n: "CON. HDMI A RCA ETOUCH", p: "Q100.00"}, {n: "FORZA FWT631USBC", p: "Q160.00"}, {n: "CDP 5 TOMAS 1250W", p: "Q50.00"}
+            ],
+            "Relojes": [
+                {n: "XIAOMI REDMI 5 ACTIVE", p: "Q299.00"}, {n: "XIAOMI REDMI 5 LITE", p: "Q435.00"}, {n: "SMART BAND 9 ACTIVE", p: "Q225.00"}
+            ],
+            "Otros": [
+                {n: "ESCÁNER ZEBRA LI2208", p: "Q725.00"}, {n: "CINTA RIBBON ZEBRA", p: "Q1625.00"}, {n: "CABLE ZEBRA USB-C", p: "Q100.00"},
+                {n: "MOUSE PAD XTA-526", p: "Q50.00"}, {n: "MOUSE PAD VARIOS", p: "Q15.00"}
+            ]
+        };
+
+        function irTienda() {
+            document.getElementById('portada').style.display = 'none';
+            document.getElementById('tienda').style.display = 'block';
+            window.scrollTo(0,0);
+            renderFiltros();
+            filtrar('Audífonos');
+        }
+
+        function irInicio() {
+            document.getElementById('portada').style.display = 'flex';
+            document.getElementById('tienda').style.display = 'none';
+        }
+
+        function renderFiltros() {
+            const menu = document.getElementById('menu-filtros');
+            menu.innerHTML = '';
+            Object.keys(db).forEach(cat => {
+                const btn = document.createElement('button');
+                btn.className = 'btn-cat';
+                btn.innerText = cat;
+                btn.onclick = () => filtrar(cat);
+                menu.appendChild(btn);
+            });
+        }
+
+        function filtrar(categoria) {
+            const lista = document.getElementById('lista-productos');
+            lista.innerHTML = '';
+            
+            document.querySelectorAll('.btn-cat').forEach(b => {
+                b.classList.remove('active');
+                if(b.innerText === categoria) b.classList.add('active');
+            });
+
+            db[categoria].forEach(p => {
+                lista.innerHTML += `
+                    <div class="card">
+                        <img src="https://via.placeholder.com/200x150/0a0e1a/39FF14?text=${p.n}" alt="img">
+                        <h3>${p.n}</h3>
+                        <p class="precio">${p.p}</p>
+                    </div>
+                `;
+            });
+        }
+    </script>
+</body>
+</html>
